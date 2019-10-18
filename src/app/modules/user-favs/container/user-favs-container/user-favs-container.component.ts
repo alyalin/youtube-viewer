@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FavoritesService } from '../../../../services/favorites.service';
+import { YtItem } from '../../../../interfaces/yt-response';
 
 @Component({
   selector: 'app-user-favs-container',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserFavsContainerComponent implements OnInit {
 
-  constructor() { }
+  items = this.favsService.items;
 
-  ngOnInit() {
+  constructor(private readonly favsService: FavoritesService) { }
+
+  ngOnInit() {}
+
+  handleRemoveFromFavsClicked(item: YtItem) {
+    this.favsService.rmItem(item);
+    this.items = this.favsService.items;
   }
-
 }
