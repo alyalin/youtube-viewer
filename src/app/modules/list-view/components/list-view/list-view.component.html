@@ -1,39 +1,44 @@
-<mat-card class="example-card">
-  <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Shiba Inu</mat-card-title>
-    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-  <mat-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-stroked-button color="primary">В избранное</button>
-  </mat-card-actions>
-</mat-card>
+<form *ngIf="items?.length" [formGroup]="searchForm">
+  <mat-form-field class="input-full-width">
+    <input matInput placeholder="Поиск" formControlName="search">
+  </mat-form-field>
+</form>
 
-<mat-divider style="margin: 10px 0;"></mat-divider>
+<div class="no-data-placeholder" *ngIf="!items || !items?.length">
+  <mat-progress-spinner
+    class="spinner"
+    color="primary" mode="indeterminate" diameter="40">
+  </mat-progress-spinner>
+</div>
 
-<mat-card class="example-card">
-  <mat-card-header>
-    <div mat-card-avatar class="example-header-image"></div>
-    <mat-card-title>Shiba Inu</mat-card-title>
-    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-  </mat-card-header>
-  <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-  <mat-card-content>
-    <p>
-      The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.
-    </p>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-stroked-button color="primary">В избранное</button>
-  </mat-card-actions>
-</mat-card>
+<ng-container *ngFor="let item of items | filter: searchForm.get('search').value; let last = last; trackBy: trackByFn">
+  <mat-card>
+    <mat-card-header>
+      <div mat-card-avatar class="header-image"></div>
+      <mat-card-title>{{ item?.snippet?.title }}</mat-card-title>
+      <mat-card-subtitle>{{ item?.snippet?.channelTitle }}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="item?.snippet?.thumbnails?.maxres?.url" alt="Video preview">
+    <mat-card-content>
+      <p>
+        {{ item?.snippet?.description }}
+      </p>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-icon-button color="primary" aria-label="Добавить в избранное" matTooltip="Добавить в избранное" *ngIf="!(item?.id | verifyInFavs: triggerPipe)" (click)="addToFavs(item)">
+        <mat-icon>favorite_border</mat-icon>
+      </button>
+      <button mat-icon-button color="primary" aria-label="Убрать из избранного" matTooltip="Убрать из избранного" *ngIf="item?.id | verifyInFavs: triggerPipe" (click)="removeFromFavs(item)">
+        <mat-icon>favorite</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-divider style="margin: 10px 0;" *ngIf="!last"></mat-divider>
+</ng-container>
+
+<div class="load-more-container" *ngIf="showLoadMoreButton && items.length">
+  <button type="button" mat-button (click)="loadMore(pageToken)">
+    <mat-icon aria-hidden="false" aria-label="Example home icon">update</mat-icon>
+    Загрузить еще</button>
+</div>
