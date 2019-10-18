@@ -20,7 +20,7 @@ export class ListViewComponent implements OnInit {
     search: ''
   });
 
-  private triggerPipe;
+  triggerPipe;
 
   constructor(private readonly fb: FormBuilder) { }
 
