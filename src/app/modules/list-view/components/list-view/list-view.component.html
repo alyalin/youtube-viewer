@@ -6,7 +6,7 @@
 
 <mat-progress-spinner
   class="spinner"
-  color="primary" mode="indeterminate" diameter="40" *ngIf="showLoader">
+  color="primary" mode="indeterminate" diameter="40" *ngIf="showLoader && !items?.length">
 </mat-progress-spinner>
 
 <div class="no-data-placeholder" *ngIf="(!items?.length || !(items | filter: searchForm.get('search').value)?.length) && !showLoader">
