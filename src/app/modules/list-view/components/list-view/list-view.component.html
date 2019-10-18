@@ -4,11 +4,13 @@
   </mat-form-field>
 </form>
 
-<div class="no-data-placeholder" *ngIf="!items || !items?.length">
-  <mat-progress-spinner
-    class="spinner"
-    color="primary" mode="indeterminate" diameter="40">
-  </mat-progress-spinner>
+<mat-progress-spinner
+  class="spinner"
+  color="primary" mode="indeterminate" diameter="40" *ngIf="!items">
+</mat-progress-spinner>
+
+<div class="no-data-placeholder" *ngIf="!items?.length || !(items | filter: searchForm.get('search').value)?.length">
+ Ничего не найдено
 </div>
 
 <ng-container *ngFor="let item of items | filter: searchForm.get('search').value; let last = last; trackBy: trackByFn">
@@ -37,7 +39,7 @@
   <mat-divider style="margin: 10px 0;" *ngIf="!last"></mat-divider>
 </ng-container>
 
-<div class="load-more-container" *ngIf="showLoadMoreButton && items.length">
+<div class="load-more-container" *ngIf="showLoadMoreButton && items?.length && (items | filter: searchForm.get('search').value)?.length">
   <button type="button" mat-button (click)="loadMore(pageToken)">
     <mat-icon aria-hidden="false" aria-label="Example home icon">update</mat-icon>
     Загрузить еще</button>
