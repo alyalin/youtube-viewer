@@ -21,10 +21,12 @@ export class ListViewComponent implements OnInit {
   });
 
   triggerPipe;
+  showLoader = true;
 
   constructor(private readonly fb: FormBuilder) { }
 
   ngOnInit() {
+    this.hideLoader();
   }
 
   loadMore(pageToken: string) {
@@ -47,5 +49,11 @@ export class ListViewComponent implements OnInit {
 
   updatePipe() {
     this.triggerPipe = new Date();
+  }
+
+  private hideLoader() {
+    setTimeout(() => {
+      this.showLoader = false;
+    }, 500);
   }
 }
